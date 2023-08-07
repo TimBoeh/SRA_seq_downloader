@@ -19,6 +19,10 @@ conda install sra-tools
 conda update sra-tools
 ```
 
+### 1b. Install `pigz` to parallel the compression step
+In the second last step the fastq files are compiled into the .gz format. This is usually done with the program gunzip or `gzip`. The disadvantage is that this program uses only one core for compression and thus takes a long time with the usually very large sequence data, especially if you want to download and process a lot of files in one go. The program `pigz` ([Parallel Implementation of GZip](https://github.com/madler/pigz)) is basically gzip on steroids, since it can utilize all processor cores/threads.
+You can easily install pigz on Ubuntu/Debian with `sudo apt install pigz`. Because it is also practical in other situations, I don't think it needs to be installed in the Conda environment, but better locally.
+
 ## 2. Git clone this repository
 To get the shell script, the easiest way is to `git clone` this repository and make it part of your path or simply set an `alias` in your `.bashrc`.
 
@@ -30,7 +34,7 @@ In your `.bashrc` add the following line, just make sure you replace the placeho
 ```
 alias sra_downloader='/home/USER/PATH/TO/SRA_seq_downloader/SRA_seq_downloader.sh'
 ```
-Afterwards you might want to reload shell with `source .bashrc`
+Afterwards you might want to restart your terminal or reload the .bashrc file with `source .bashrc`.
 
 ## 3. prepare a .csv file
 The script expects as input a simple .csv file with the SRA ID followed by the species name or what ever you to have as additional name separated by a comma: 
@@ -40,20 +44,21 @@ sequence_ID_2,species_name_2
 sequence_ID_3,species_name_3
 ...
 ```
+**Make sure there are no spaces in the sample names, as this will most likely cause problems downstream.**
 
 ## 4. Function of the script
-The script basically pipes four steps that are executed behind each other:
-1. The `prefetch` function is used to download the sequence data in SRA-format. The file is saved a sub-folder named after sequence ID.
-2. `fastq-dump` is used to extract the files from .SRA file and stores it in .fastq format. The `--split-files` flag is used to make sure you get forward and reverse reads.
-3. The two resulting .fastq files for each sequence ID, which looks like: `sequence_ID_1.fastq` & `sequence_ID_2.fastq` are renamed by adding the species name taken from the .csv file.
-4. After all files are downloaded, extracted and renamed, `pigz` is used to gunzip all .fastq files in the directory.
-5. Finally, all subfolder with the original SRA files are removed.
+The script basically pipes four steps that are executed in sequence:
+1. The `prefetch` function is used to download the sequence data in SRA format. The file is stored in a subfolder named after the sequence ID.
+2. `fastq-dump` is used to extract the files from the .SRA file and stores it in .fastq format. The `--split-files` flag is used to ensure that you get forward and reverse reads.
+3. The two resulting .fastq files for each sequence ID, which looks like this: `sequence_ID_1.fastq` & `sequence_ID_2.fastq` are renamed by adding the species name taken from the .csv file.
+4. Once all the files have been downloaded, extracted and renamed, `pigz` is used to gunzip all the .fastq files in the directory.
+5. Finally, all subfolder with the original SRA files are removed and you are left with compressed and perfectly named sequence file that can be used for downstream analyses.
 
 ## 5. Some final thoughts
-- The script only works when the respective conda-environment is activated.
-- The script should be executed in an empty folder, except from the .csv file. Be aware that all folders will be deleted, this include **ALL** folders.
-- Use the script with caution and only if you what you are doing. I wrote the script for my specific use cases. Yours might be different.
-- Using the script is at your own risk!!!
+- The script will only work if the conda environment is enabled.
+- The script should be run in an empty folder, except for the .csv file. Be aware that all folders will be deleted ... **ALL** folders!!
+- Use the script with caution and only if you know what you are doing. I have written the script for my specific use cases. Yours may be different.
+- Use the script at your own risk!
 
 
 
