@@ -1,7 +1,7 @@
 # Single Read Archive Sequence Downloader
 A small bash script that automates the process of downloading, extracting and compressing sequence files from NCBI's Single Read Archive.
 
-All you need is SRA-tools installed (I recommend a to use a conda environment for this) as a .csv file with the sequence ID and the species name separated by a comma.
+All you need is SRA-tools installed (I recommend a to use a conda environment for this) and a .csv file with the sequence ID and the species name separated by a comma.
 
 ## 1. Set up a conda-environment
 Before you create a new conda-environment, you should set the necessary channels. This is a one-time thing to do as is explained on the Bioconda [homepage](https://bioconda.github.io/) or search for `set-up-channels bioconda`
