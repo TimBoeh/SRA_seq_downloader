@@ -33,7 +33,7 @@ alias sra_downloader='/home/USER/PATH/TO/SRA_seq_downloader/SRA_seq_downloader.s
 Afterwards you might want to reload shell with `source .bashrc`
 
 ## 3. prepare a .csv file
-The script expects as input a simple .vsc file with the SRA ID followed by the species name or what ever you to have as additional name separated by a comma: 
+The script expects as input a simple .csv file with the SRA ID followed by the species name or what ever you to have as additional name separated by a comma: 
 ```
 sequence_ID_1,species_name_1
 sequence_ID_2,species_name_2
